@@ -61,7 +61,7 @@
                     {name: "Two-Hand", image: require('@/assets/inventory_types/Inv_two_hand.png'), checked: false},
                     {name: "One-Hand", image: require('@/assets/inventory_types/Inv_one_hand.png'), checked: false},
                     {name: "Held In Off-hand", image: require('@/assets/inventory_types/Inv_held_in_offhand.png'), checked: false},
-                    {name: "Off Hand", image: require('@/assets/inventory_types/Inv_offhand.png'), checked: false},
+                    {name: "Off Hand", image: require('@/assets/inventory_types/Inv_shield_04.png'), checked: false},
                     {name: "Wrist", image: require('@/assets/inventory_types/Inv_wrist.png'), checked: false},
                     {name: "Hands", image: require('@/assets/inventory_types/Inv_hands.png'), checked: false},
                     {name: "Waist", image: require('@/assets/inventory_types/Inv_waist.png'), checked: false},

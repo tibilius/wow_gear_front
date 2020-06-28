@@ -97,6 +97,7 @@
                     .then(json => {
                         this.g_items = json.data
                     }).catch(() => {
+                    this.g_items = []
                 })
             }
         },
