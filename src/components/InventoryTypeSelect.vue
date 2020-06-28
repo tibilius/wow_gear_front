@@ -1,22 +1,23 @@
 <template>
     <div>
-        <input type="checkbox" :id="'cb'+index" v-model="w_class.checked" @change="$emit('change-class', w_class)" />
-        <label :for="'cb'+index" :title="w_class.name"><img :src="w_class.image"/></label>
+        <input type="checkbox" :id="'it'+index" v-model="inventory_type.checked"
+               @change="$emit('change-inventory', inventory_type)" />
+        <label :for="'it'+index" :title="inventory_type.name"><img :src="inventory_type.image"/></label>
     </div>
 </template>
 
 <script>
     export default {
-        name: "WowPLayerClassSelect",
+        name: "InventoryTypeSelect",
         props: {
-            w_class: Object,
+            inventory_type: Object,
             index: Number,
         }
     }
 </script>
 
 <style scoped>
-    input[type="checkbox"][id^="cb"] {
+    input[type="checkbox"][id^="it"] {
         display: none;
     }
 

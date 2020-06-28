@@ -8,7 +8,16 @@
                     @change-class="changeClasses"
             />
         </div>
-        <span>Filters</span>&nbsp;<button class="add-filter" type="button" @click.prevent="addFilter()">&#43;</button>
+        <div class="inventory_type_select">
+            <InventoryTypeSelect
+                    v-for="(inventory_type, index) in inventory_types" :key="index"
+                    v-bind:index="index"
+                    v-bind:inventory_type="inventory_type"
+                    @change-inventory="changeInventoryType"
+            />
+        </div>
+        <span>Secondary Stats Filters</span>&nbsp;
+        <button class="add-filter" type="button" @click.prevent="addFilter()">&#43;</button>
         <FieldOperatorValueSearchItem
                 v-for="(filter, index) in item_filters"
                 :key="index"
@@ -26,6 +35,7 @@
 <script>
     import FieldOperatorValueSearchItem from "@/components/FieldOperatorValueSearchItem";
     import WowPLayerClassSelect from "@/components/WowPLayerClassSelect";
+    import InventoryTypeSelect from "@/components/InventoryTypeSelect";
 
     export default {
         name: "SearchItemsForm",
@@ -45,7 +55,21 @@
                     {name: "Monk", image: require('@/assets/wow_classes/monk.jpg'), checked: false},
                     {name: "Druid", image: require('@/assets/wow_classes/druid.jpg'), checked: false},
                     {name: "Demon Hunter", image: require('@/assets/wow_classes/dh.jpg'), checked: false}
-
+                ],
+                inventory_types: [
+                    {name: "Ranged", image: require('@/assets/inventory_types/Inv_bow.png'), checked: false},
+                    {name: "Two-Hand", image: require('@/assets/inventory_types/Inv_two_hand.png'), checked: false},
+                    {name: "One-Hand", image: require('@/assets/inventory_types/Inv_one_hand.png'), checked: false},
+                    {name: "Held In Off-hand", image: require('@/assets/inventory_types/Inv_held_in_offhand.png'), checked: false},
+                    {name: "Off Hand", image: require('@/assets/inventory_types/Inv_offhand.png'), checked: false},
+                    {name: "Wrist", image: require('@/assets/inventory_types/Inv_wrist.png'), checked: false},
+                    {name: "Hands", image: require('@/assets/inventory_types/Inv_hands.png'), checked: false},
+                    {name: "Waist", image: require('@/assets/inventory_types/Inv_waist.png'), checked: false},
+                    {name: "Legs", image: require('@/assets/inventory_types/Inv_pants.png'), checked: false},
+                    {name: "Feet", image: require('@/assets/inventory_types/Inv_feet.png'), checked: false},
+                    // {name: "Back", image: require('@/assets/inventory_types/warrior.png'), checked: false},
+                    {name: "Finger", image: require('@/assets/inventory_types/Inv_finger.png'), checked: false},
+                    {name: "Trinket", image: require('@/assets/inventory_types/Inv_trinket.png'), checked: false},
                 ],
                 filter_fields: [
                     {value: "crit", text: "Crit Chance"},
@@ -65,29 +89,46 @@
         props: {
             item_filters: Array,
             filteredClasses: Array,
+            inventoryType: Array,
         },
         watch: {
             filteredClasses: function () {
                 this.wow_classes.forEach(element => {
                     if (this.filteredClasses.indexOf(element.name) !== -1) {
                         element.checked = true;
-                    }
-                    else {
+                    } else {
                         element.checked = false;
                     }
                 })
-            }
+            },
+            inventoryType: function () {
+                this.inventory_types.forEach(element => {
+                    if (this.inventoryType.indexOf(element.name) !== -1) {
+                        element.checked = true;
+                    } else {
+                        element.checked = false;
+                    }
+                })
+            },
         },
 
         computed: {
-            compfilteredClasses: {
+            c_filteredClasses: {
                 get: function () {
                     return this.wow_classes.filter(p => p.checked).map(function (item) {
                         return item.name;
                     })
 
                 }
-            }
+            },
+            c_inventoryTypes: {
+                get: function () {
+                    return this.inventory_types.filter(p => p.checked).map(function (item) {
+                        return item.name;
+                    })
+
+                }
+            },
         },
         methods: {
             onSubmit: function () {
@@ -101,21 +142,24 @@
                 this.$emit('search-submit')
             },
             changeClasses: function () {
-                this.$emit('change-filtered-classes', this.compfilteredClasses)
+                this.$emit('change-filtered-classes', this.c_filteredClasses)
+            },
+            changeInventoryType: function () {
+                this.$emit('change-inventory-type', this.c_inventoryTypes)
             },
         },
-        components: {FieldOperatorValueSearchItem, WowPLayerClassSelect}
+        components: {FieldOperatorValueSearchItem, WowPLayerClassSelect, InventoryTypeSelect}
 
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wow_class_select {
+    .wow_class_select, .inventory_type_select {
         margin: 20px auto;
     }
 
-    .wow_class_select > div {
+    .wow_class_select > div,  .inventory_type_select > div {
         display: inline-block;
     }
 

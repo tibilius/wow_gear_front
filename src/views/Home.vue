@@ -5,6 +5,7 @@
             v-bind:filteredClasses="filteredClasses"
             @search-submit="doSearch"
             @change-filtered-classes="onChangeFilteredClasses"
+            @change-inventory-type="onChangeinventoryType"
     />
 </template>
 
@@ -22,9 +23,9 @@
                 g_items: [],
                 item_filters: [],
                 filteredClasses: [],
+                inventory_type: [],
                 limit: 100,
                 offset: 0,
-
             }
         },
         computed: {
@@ -41,6 +42,13 @@
                             'value': this.filteredClasses
                         }])
                     }
+                    if (this.inventory_type.length) {
+                        result = result.concat([{
+                            'field': 'inventory_type',
+                            'operator': 'in',
+                            'value': this.inventory_type
+                        }])
+                    }
                     return JSON.stringify(result)
                 },
                 set: function (newValue) { //$route.query
@@ -50,58 +58,52 @@
                     if (newValue.class) {
                         this.filteredClasses = JSON.parse(newValue.class)
                     }
+                    if (newValue.inventory_type) {
+                        this.inventory_type = JSON.parse(newValue.inventory_type)
+                    }
                 }
             }
         },
         methods: {
-            onChangeFilteredClasses: function(value){
+            onChangeFilteredClasses: function (value) {
                 this.filteredClasses = value
                 this.doSearch()
-
+            },
+            onChangeinventoryType: function (value) {
+                this.inventory_type = value
+                this.doSearch()
             },
             doSearch: function () {
+                let query = Object.assign({}, this.$route.query);
+                query.filters = JSON.stringify(this.item_filters);
+                query.class = JSON.stringify(this.filteredClasses);
+                query.inventory_type = JSON.stringify(this.inventory_type);
+                router.push({path: this.$route.path, query: query}).catch(() => {
+                })
+            },
+            getApiEnities: function () {
                 const url = "http://tibilius.me/api/dungeon/items?" + new URLSearchParams(Object.entries({
                     limit: this.limit,
                     offset: this.offset,
                     filters: this.apiFilters,
                 })).toString()
-
-                try {
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(json => {
-                            this.g_items = json.data
-
-                            let query = Object.assign({}, this.$route.query);
-                            query.filters = JSON.stringify(this.item_filters);
-                            query.class = JSON.stringify(this.filteredClasses);
-
-                            router.push({path: this.$route.path, query: query})
-                        })
-                } catch (e) {
-                    router.push({path: '/'})
-                }
+                fetch(url)
+                    .then(response => response.json())
+                    .then(json => {
+                        this.g_items = json.data
+                    }).catch(() => {
+                })
             }
         },
         watch: {
-            '$route' (to) {
+            '$route'(to) {
                 this.apiFilters = to.query
-                this.doSearch()
+                this.getApiEnities()
             }
         },
         mounted() {
             this.apiFilters = this.$route.query
-            const url = "http://tibilius.me/api/dungeon/items?" + new URLSearchParams(Object.entries({
-                    limit: this.limit,
-                    offset: this.offset,
-                    filters: this.apiFilters,
-                }
-            )).toString()
-            fetch(url)
-                .then(response => response.json())
-                .then(json => {
-                    this.g_items = json.data
-                })
+            this.getApiEnities()
         }
     }
 </script>

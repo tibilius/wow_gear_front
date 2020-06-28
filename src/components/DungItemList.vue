@@ -3,8 +3,10 @@
         <SearchItemsForm
                 v-bind:item_filters="item_filters"
                 v-bind:filteredClasses="filteredClasses"
+                v-bind:inventoryType="inventoryType"
                 @search-submit="$emit('search-submit')"
                 @change-filtered-classes="onChange"
+                @change-inventory-type="onChangeIT"
         />
         <ul class="items tilesWrap">
             <DungItem
@@ -25,10 +27,14 @@
             g_items: Array,
             item_filters: Array,
             filteredClasses: Array,
+            inventoryType:Array,
         },
         methods: {
             onChange:function(Value){
                 this.$emit('change-filtered-classes', Value)
+            },
+            onChangeIT:function(Value){
+                this.$emit('change-inventory-type', Value)
             }
         },
         components: {SearchItemsForm, DungItem}
