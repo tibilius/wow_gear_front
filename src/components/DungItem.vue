@@ -68,11 +68,11 @@
     }
     li h2 {
         color: #61724d;
-        font-size: 114px;
+        font-size: 85px;
         margin: 0;
         position: absolute;
         opacity: 0.2;
-        top: 50px;
+        top: 20px;
         right: 10px;
         transition: all 0.3s ease-in-out;
     }

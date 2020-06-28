@@ -1,6 +1,11 @@
 <template>
     <div>
-        <SearchItemsForm v-bind:item_filters="item_filters" @search-submit="onSubmit"/>
+        <SearchItemsForm
+                v-bind:item_filters="item_filters"
+                v-bind:filteredClasses="filteredClasses"
+                @search-submit="$emit('search-submit')"
+                @change-filtered-classes="onChange"
+        />
         <ul class="items tilesWrap">
             <DungItem
                     v-for="g_item in g_items"
@@ -17,18 +22,14 @@
 
     export default {
         props: {
-            g_items: {
-                type: Array
-            },
-            item_filters: {
-                type: Array
-            }
+            g_items: Array,
+            item_filters: Array,
+            filteredClasses: Array,
         },
         methods: {
-            onSubmit: function () {
-                console.log(this.item_filters)
-                this.$emit('search-submit')
-            },
+            onChange:function(Value){
+                this.$emit('change-filtered-classes', Value)
+            }
         },
         components: {SearchItemsForm, DungItem}
 
