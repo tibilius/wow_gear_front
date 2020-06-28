@@ -85,9 +85,14 @@
                 const url = "http://tibilius.me/api/dungeon/items?" + new URLSearchParams(Object.entries({
                     limit: this.limit,
                     offset: this.offset,
-                    filters: this.apiFilters,
                 })).toString()
-                fetch(url)
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({filters: this.apiFilters}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                     .then(response => response.json())
                     .then(json => {
                         this.g_items = json.data

@@ -21,4 +21,13 @@
         margin: 0px;
         background-color: #2c3138;
     }
+    #app > h1{
+        margin: 0;
+        padding: 2rem;
+    }
+    body {
+        margin: 0;
+    }
+
+
 </style>
