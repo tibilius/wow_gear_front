@@ -43,18 +43,18 @@
             return {
                 // @todo grab from api desc
                 wow_classes: [
-                    {name: "Warrior", image: require('@/assets/wow_classes/warrior.jpg'), checked: false},
-                    {name: "Paladin", image: require('@/assets/wow_classes/pala.jpg'), checked: false},
-                    {name: "Hunter", image: require('@/assets/wow_classes/hunt.jpg'), checked: false},
-                    {name: "Rouge", image: require('@/assets/wow_classes/rouge.jpg'), checked: false},
-                    {name: "Priest", image: require('@/assets/wow_classes/priest.jpg'), checked: false},
-                    {name: "Death Knight", image: require('@/assets/wow_classes/dk.jpg'), checked: false},
-                    {name: "Shaman", image: require('@/assets/wow_classes/shaman.jpg'), checked: false},
-                    {name: "Mage", image: require('@/assets/wow_classes/mage.jpg'), checked: false},
-                    {name: "Warlock", image: require('@/assets/wow_classes/warlock.jpg'), checked: false},
-                    {name: "Monk", image: require('@/assets/wow_classes/monk.jpg'), checked: false},
-                    {name: "Druid", image: require('@/assets/wow_classes/druid.jpg'), checked: false},
-                    {name: "Demon Hunter", image: require('@/assets/wow_classes/dh.jpg'), checked: false}
+                    {name: "Warrior", image: require('@/assets/wow_classes/warrior.png'), checked: false},
+                    {name: "Paladin", image: require('@/assets/wow_classes/pala.png'), checked: false},
+                    {name: "Hunter", image: require('@/assets/wow_classes/hunt.png'), checked: false},
+                    {name: "Rouge", image: require('@/assets/wow_classes/rogue.png'), checked: false},
+                    {name: "Priest", image: require('@/assets/wow_classes/priest.png'), checked: false},
+                    {name: "Death Knight", image: require('@/assets/wow_classes/dk.png'), checked: false},
+                    {name: "Shaman", image: require('@/assets/wow_classes/shaman.png'), checked: false},
+                    {name: "Mage", image: require('@/assets/wow_classes/mage.png'), checked: false},
+                    {name: "Warlock", image: require('@/assets/wow_classes/warlock.png'), checked: false},
+                    {name: "Monk", image: require('@/assets/wow_classes/monk.png'), checked: false},
+                    {name: "Druid", image: require('@/assets/wow_classes/druid.png'), checked: false},
+                    {name: "Demon Hunter", image: require('@/assets/wow_classes/dh.png'), checked: false}
                 ],
                 inventory_types: [
                     {name: "Ranged", image: require('@/assets/inventory_types/Inv_bow.png'), checked: false},
