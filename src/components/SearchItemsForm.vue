@@ -46,7 +46,7 @@
                     {name: "Warrior", image: require('@/assets/wow_classes/warrior.png'), checked: false},
                     {name: "Paladin", image: require('@/assets/wow_classes/pala.png'), checked: false},
                     {name: "Hunter", image: require('@/assets/wow_classes/hunt.png'), checked: false},
-                    {name: "Rouge", image: require('@/assets/wow_classes/rogue.png'), checked: false},
+                    {name: "Rogue", image: require('@/assets/wow_classes/rogue.png'), checked: false},
                     {name: "Priest", image: require('@/assets/wow_classes/priest.png'), checked: false},
                     {name: "Death Knight", image: require('@/assets/wow_classes/dk.png'), checked: false},
                     {name: "Shaman", image: require('@/assets/wow_classes/shaman.png'), checked: false},
