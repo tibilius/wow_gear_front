@@ -82,10 +82,11 @@
                 })
             },
             getApiEnities: function () {
-                const url = "http://tibilius.me/api/dungeon/items?" + new URLSearchParams(Object.entries({
-                    limit: this.limit,
-                    offset: this.offset,
-                })).toString()
+                const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
+                    + new URLSearchParams(Object.entries({
+                        limit: this.limit,
+                        offset: this.offset,
+                    })).toString()
                 fetch(url, {
                     method: 'POST',
                     body: JSON.stringify({filters: this.apiFilters}),

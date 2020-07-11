@@ -17,7 +17,7 @@
             <p v-if="g_item.spells.length > 0" class="spells">{{ g_item.spells | concat}}</p>
 
         </div>
-        <button> Add to wish list</button>
+        <button style="display: none"> Add to wish list</button>
         <a :href="'http://wowhead.com/item=' + g_item.id" target="_blank">wowhead</a>
 
     </li>
