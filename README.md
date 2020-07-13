@@ -20,5 +20,10 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
+## Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+#demo view
+u can see result in http://tibilius.me, Actually now app linked to my personal notebook, so if some overhead would be become, i`ll turn it off
+
+u can see back part of this  [here](https://github.com/tibilius/wow_gear_backend)
