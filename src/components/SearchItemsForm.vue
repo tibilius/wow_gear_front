@@ -75,6 +75,7 @@
                     {value: "crit", text: "Crit Chance"},
                     {value: "haste", text: "Haste"},
                     {value: "versatility", text: "Versatility"},
+                    {value: "mastery", text: "Mastery"},
                 ],
                 filter_operators: [
                     {value: "gte", text: "&gt;="},
