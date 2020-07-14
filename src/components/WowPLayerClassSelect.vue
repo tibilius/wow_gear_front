@@ -1,21 +1,31 @@
 <template>
-    <div>
-        <input type="checkbox" :id="'cb'+index" v-model="w_class.checked" @change="$emit('change-class', w_class)" />
-        <label :for="'cb'+index" :title="w_class.name"><img :src="w_class.image"/></label>
+    <div class="container">
+        <div v-for="(w_class, index) in filteredClasses" :key="index">
+            <input type="checkbox" :id="'cb'+index" v-model="w_class.checked" @change="onChange"/>
+            <label :for="'cb'+index" :title="w_class.name"><img :src="w_class.image"/></label>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: "WowPLayerClassSelect",
-        props: {
-            w_class: Object,
-            index: Number,
+        props: ['filteredClasses'],
+        methods: {
+            onChange: function () {
+                let query = Object.assign({}, this.$route.query);
+                query.class = JSON.stringify(this.$store.getters.getSelectedClasses);
+                this.$router.push({path: this.$route.path, query: query}).catch(() => {})
+            }
         }
     }
 </script>
 
 <style scoped>
+    div {
+        display: inline-block;
+    }
+
     input[type="checkbox"][id^="cb"] {
         display: none;
     }

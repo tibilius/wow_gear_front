@@ -1,24 +1,24 @@
 <template>
     <li>
-        <div class="icon"><img :src="mediaIcon(g_item.media)"></div>
-        <h2 v-bind:class="g_item.dungeon.shortcut">{{ g_item.dungeon.shortcut}}</h2>
-        <h3>{{ g_item.name }}</h3>
+        <div class="icon"><img :src="mediaIcon(gItem.media)"></div>
+        <h2 v-bind:class="gItem.dungeon.shortcut">{{ gItem.dungeon.shortcut}}</h2>
+        <h3>{{ gItem.name }}</h3>
         <div>
-            <p v-if="g_item.inventory_type" class="inventory_type">
-                <span class="subclass">{{g_item.item_subclass}}</span>
-                <span class="type">{{g_item.inventory_type}}</span>
+            <p v-if="gItem.inventory_type" class="inventory_type">
+                <span class="subclass">{{gItem.item_subclass}}</span>
+                <span class="type">{{gItem.inventory_type}}</span>
             </p>
-            <p v-if="g_item.main_stat > 0" class="main_stat"><span>Main stat: </span> {{g_item.main_stat}}</p>
-            <p v-if="g_item.stamina > 0" class="stamina"><span>Stamina:</span> {{g_item.stamina}}</p>
-            <p v-if="g_item.haste > 0" class="haste"><span>Haste:</span> {{ g_item.haste}}</p>
-            <p v-if="g_item.versatility > 0" class="versatility"><span>Versa: </span> {{ g_item.versatility}}</p>
-            <p v-if="g_item.crit > 0" class="crit"><span>Crit: </span> {{ g_item.crit}}</p>
-            <p v-if="g_item.mastery > 0" class="mastery"><span>Mastery: </span> {{ g_item.mastery}}</p>
-            <p v-if="g_item.spells.length > 0" class="spells">{{ g_item.spells | concat}}</p>
+            <p v-if="gItem.main_stat > 0" class="main_stat"><span>Main stat: </span> {{gItem.main_stat}}</p>
+            <p v-if="gItem.stamina > 0" class="stamina"><span>Stamina:</span> {{gItem.stamina}}</p>
+            <p v-if="gItem.haste > 0" class="haste"><span>Haste:</span> {{ gItem.haste}}</p>
+            <p v-if="gItem.versatility > 0" class="versatility"><span>Versa: </span> {{ gItem.versatility}}</p>
+            <p v-if="gItem.crit > 0" class="crit"><span>Crit: </span> {{ gItem.crit}}</p>
+            <p v-if="gItem.mastery > 0" class="mastery"><span>Mastery: </span> {{ gItem.mastery}}</p>
+            <p v-if="gItem.spells.length > 0" class="spells">{{ gItem.spells | concat}}</p>
 
         </div>
         <button style="display: none"> Add to wish list</button>
-        <a :href="'http://wowhead.com/item=' + g_item.id" target="_blank">wowhead</a>
+        <a :href="'http://wowhead.com/item=' + gItem.id" target="_blank">wowhead</a>
 
     </li>
 </template>
@@ -26,7 +26,7 @@
 <script>
     export default {
         props: {
-            g_item: {
+            gItem: {
                 type: Object
             }
         },
