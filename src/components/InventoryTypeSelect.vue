@@ -1,22 +1,30 @@
 <template>
     <div>
-        <input type="checkbox" :id="'it'+index" v-model="inventory_type.checked"
-               @change="$emit('change-inventory', inventory_type)" />
-        <label :for="'it'+index" :title="inventory_type.name"><img :src="inventory_type.image"/></label>
+        <div v-for="(inventory_type,index) in inventoryType" :key="index">
+            <input type="checkbox" :id="'it'+index" v-model="inventory_type.checked" @change="onChange"/>
+            <label :for="'it'+index" :title="inventory_type.name"><img :src="inventory_type.image"/></label>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: "InventoryTypeSelect",
-        props: {
-            inventory_type: Object,
-            index: Number,
+        props: ['inventoryType'],
+        methods: {
+            onChange: function () {
+                let query = Object.assign({}, this.$route.query);
+                query.inventory_type = JSON.stringify(this.$store.getters.getSelectedInventoryType);
+                this.$router.push({path: this.$route.path, query: query}).catch(() => {})
+            }
         }
     }
 </script>
 
 <style scoped>
+    div {
+        display: inline-block;
+    }
     input[type="checkbox"][id^="it"] {
         display: none;
     }

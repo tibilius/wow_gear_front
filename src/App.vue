@@ -1,6 +1,8 @@
 <template>
     <div id="app">
         <h1>Welcome to Wow BFA dungeon items finder</h1>
+        <router-link to="/">Home</router-link>
+        <router-link to="/wl">Wish List</router-link>
         <router-view/>
     </div>
 </template>
