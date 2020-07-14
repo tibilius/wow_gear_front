@@ -14,9 +14,19 @@
         methods: {
             onChange: function () {
                 let query = Object.assign({}, this.$route.query);
-                query.inventory_type = JSON.stringify(this.$store.getters.getSelectedInventoryType);
-                this.$router.push({path: this.$route.path, query: query}).catch(() => {})
+                const querySelectedInventoryType = JSON.stringify(this.$store.getters.getSelectedInventoryType)
+                if (query.inventory_type !== querySelectedInventoryType) {
+                    this.$store.getters.getSelectedInventoryType.length
+                        ? (query.inventory_type = querySelectedInventoryType)
+                        : (delete query.inventory_type)
+
+                    this.$router.push({path: this.$route.path, query: query}).catch(() => {
+                    })
+                }
             }
+        },
+        mounted() {
+            this.onChange()
         }
     }
 </script>
@@ -25,6 +35,7 @@
     div {
         display: inline-block;
     }
+
     input[type="checkbox"][id^="it"] {
         display: none;
     }

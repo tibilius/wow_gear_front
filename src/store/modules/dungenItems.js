@@ -28,7 +28,12 @@ export default {
                     'Content-Type': 'application/json'
                 }
             })
-            const items = await res.json()
+            let items = {'data':[],'count':0}
+            try {
+               items = await res.json()
+            }catch (e) {
+               console.log(e)
+            }
             commit('updateDungeonItems', items['data'])
             commit('updateDungeonItemsCount', items['count'])
         }
@@ -37,6 +42,9 @@ export default {
     mutations: {
         addItemToWishList(state, item) {
             state.wishList.push(item)
+        },
+        removeFromWishList(state, item) {
+            state.wishList.splice(state.wishList.findIndex(p => p.id === item.id), 1)
         },
         updateDungeonItems(state, items) {
             state.dungeonItems = items
@@ -98,10 +106,14 @@ export default {
         ],
         itemFilters: [],
         wishList: [],
+        count: 0,
     },
     getters: {
         getApiEntities(state) {
             return state.dungeonItems
+        },
+        getApiEntitiesCount(state) {
+            return state.count
         },
         getFilteredClasses(state) {
             return state.filteredClasses
@@ -114,6 +126,9 @@ export default {
         },
         getWishList(state) {
             return state.wishList
+        },
+        getWishListCount(state) {
+            return state.wishList.length
         },
         getSelectedClasses(state) {
             return state.filteredClasses.filter(p => p.checked).map(p => p.name)

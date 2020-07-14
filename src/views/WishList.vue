@@ -1,7 +1,11 @@
 <template>
+    <div>
     <DungItemList
             v-bind:gItems="wishList"
+            v-bind:filteredClasses="filteredClasses"
     />
+    </div>
+
 </template>
 
 <script>
@@ -12,42 +16,13 @@
         components: {
             DungItemList
         },
-        data() {
-            return {
-                wishList:[],
-            }
-        },
-        methods: {
-            addItem: function(item) {
-              this.wishList.push(item)
+        computed:{
+            wishList() {
+                return this.$store.getters.getWishList;
             },
-            getApiEnities: function () {
-                const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
-                    + new URLSearchParams(Object.entries({
-                        limit: this.limit,
-                        offset: this.offset,
-                    })).toString()
-                fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify({filters: this.apiFilters}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(json => {
-                        this.g_items = json.data
-                    }).catch(() => {
-                    this.g_items = []
-                })
-            }
-        },
-        watch: {
-
-        },
-        mounted() {
-            this.wishList = localStorage.wishList;
-            this.getApiEnities()
+            filteredClasses() {
+                return this.$store.getters.getFilteredClasses;
+            },
         }
     }
 </script>

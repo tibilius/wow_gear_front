@@ -64,7 +64,7 @@
             },
             removeFilter: function (index) {
                 this.itemFilters.splice(index, 1)
-                this.$emit('search-submit')
+                this.onSubmit()
             },
         },
         components: {FieldOperatorValueSearchItem, WowPLayerClassSelect, InventoryTypeSelect}

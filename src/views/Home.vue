@@ -49,7 +49,7 @@
             }
         },
         mounted() {
-            this.$store.dispatch('queryExternalUpdate',this.$route.query)
+            this.$store.dispatch('queryExternalUpdate', this.$route.query)
         }
     }
 </script>

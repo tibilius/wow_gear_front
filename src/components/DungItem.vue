@@ -1,5 +1,5 @@
 <template>
-    <li>
+    <li :class="[isItemInWishList? 'wish-list':'']">
         <div class="icon"><img :src="mediaIcon(gItem.media)"></div>
         <h2 v-bind:class="gItem.dungeon.shortcut">{{ gItem.dungeon.shortcut}}</h2>
         <h3>{{ gItem.name }}</h3>
@@ -17,7 +17,10 @@
             <p v-if="gItem.spells.length > 0" class="spells">{{ gItem.spells | concat}}</p>
 
         </div>
-        <button style="display: none"> Add to wish list</button>
+
+        <button @click="removeFromWishList" v-if="isItemInWishList"> Remove from wish list</button>
+        <button @click="addToWishList" v-else> Add to wish list</button>
+
         <a :href="'http://wowhead.com/item=' + gItem.id" target="_blank">wowhead</a>
 
     </li>
@@ -30,9 +33,21 @@
                 type: Object
             }
         },
+        computed:{
+            isItemInWishList() {
+                return this.$store.getters.getWishList.length
+                    && this.$store.getters.getWishList.find(p => p.id === this.gItem.id)
+            },
+        },
         methods: {
+            addToWishList() {
+                this.$store.commit('addItemToWishList', this.gItem)
+            },
+            removeFromWishList() {
+                this.$store.commit('removeFromWishList', this.gItem)
+            },
             mediaIcon: function (some) {
-                const mIcon =  some.find(({key}) => key === 'icon')
+                const mIcon = some.find(({key}) => key === 'icon')
                 if (mIcon == undefined) {
                     return '@/assets/wow_classes/warrior.jpg';
                 }
@@ -53,6 +68,7 @@
         top: 20px;
         left: 20px;
     }
+
     p.inventory_type {
         color: #0ABFBC;
         width: 100%;
@@ -89,6 +105,9 @@
         background: #3c4545;
         border: 1px solid #252727;
         text-align: left;
+    }
+    li.wish-list{
+        border: 2px #9b1bb1 solid;
     }
 
     li a {
