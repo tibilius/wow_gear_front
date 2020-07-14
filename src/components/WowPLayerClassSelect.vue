@@ -13,10 +13,19 @@
         props: ['filteredClasses'],
         methods: {
             onChange: function () {
-                let query = Object.assign({}, this.$route.query);
-                query.class = JSON.stringify(this.$store.getters.getSelectedClasses);
-                this.$router.push({path: this.$route.path, query: query}).catch(() => {})
+                let query = Object.assign({}, this.$route.query)
+                const querySelectedClasses = JSON.stringify(this.$store.getters.getSelectedClasses)
+                if (query.class !== querySelectedClasses ) {
+                    this.$store.getters.getSelectedClasses.length
+                        ? query.class = querySelectedClasses
+                        : delete query.class
+                    this.$router.push({path: this.$route.path, query: query}).catch(() => {
+                    })
+                }
             }
+        },
+        mounted() {
+            this.onChange()
         }
     }
 </script>
