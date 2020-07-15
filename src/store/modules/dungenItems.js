@@ -13,7 +13,30 @@ export default {
             }
             ctx.dispatch('fetchDungeonItems')
         },
+        async queryWishListUpdate(ctx, routeQuery) {
+            if (!routeQuery.items ||  JSON.stringify(ctx.getters.getWishListItemsIds) === routeQuery.items) {
+                return
+            }
+            const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
+                + new URLSearchParams(Object.entries({
+                    limit: 100
+                })).toString()
 
+            const res = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({filters: [{"field": "id", "operator": "in", "value": JSON.parse(routeQuery.items)}]}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            let items = {'data': [], 'count': 0}
+            try {
+                items = await res.json()
+            } catch (e) {
+                console.log(e)
+            }
+            ctx.commit('updateWishList', items['data'])
+        },
         async fetchDungeonItems({commit, getters}, limit = 10, offset = 0,) {
             const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
                 + new URLSearchParams(Object.entries({
@@ -28,11 +51,11 @@ export default {
                     'Content-Type': 'application/json'
                 }
             })
-            let items = {'data':[],'count':0}
+            let items = {'data': [], 'count': 0}
             try {
-               items = await res.json()
-            }catch (e) {
-               console.log(e)
+                items = await res.json()
+            } catch (e) {
+                console.log(e)
             }
             commit('updateDungeonItems', items['data'])
             commit('updateDungeonItemsCount', items['count'])
@@ -42,6 +65,9 @@ export default {
     mutations: {
         addItemToWishList(state, item) {
             state.wishList.push(item)
+        },
+        updateWishList(state, items) {
+            state.wishList = items
         },
         removeFromWishList(state, item) {
             state.wishList.splice(state.wishList.findIndex(p => p.id === item.id), 1)
@@ -135,6 +161,9 @@ export default {
         },
         getSelectedInventoryType(state) {
             return state.inventoryType.filter(p => p.checked).map(p => p.name)
+        },
+        getWishListItemsIds(state) {
+            return state.wishList.map(p => p.id)
         },
         getApiFilters(state, getters) {
             let apiFilters = []
