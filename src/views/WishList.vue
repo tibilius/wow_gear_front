@@ -1,5 +1,11 @@
 <template>
     <div>
+
+        <a v-if="wishList.length" :href="
+        'data:application/csv;charset=utf-8,' + encodeURI($store.getters.getWishListDownload)
+        " download="wishlist.csv">
+            Export to csv
+        </a>
     <DungItemList
             v-bind:gItems="wishList"
             v-bind:filteredClasses="filteredClasses"
