@@ -30,8 +30,10 @@
     }
 
     .tilesWrap {
-        padding: 0;
-        margin: 50px auto;
+        /*padding: 0;*/
+        /*margin: 50px auto;*/
+        margin-bottom: 0;
+        /*padding-bottom: 50px;*/
         list-style: none;
         text-align: center;
     }

@@ -35,6 +35,10 @@
         margin: 0px;
         background-color: #2c3138;
     }
+    html, body,#app{
+        /*display: contents;*/
+        min-height: 100vh;
+    }
     #app > h1{
         margin: 0;
         padding: 2rem;
@@ -56,7 +60,7 @@
     nav a {
         display: inline-block;
         padding: 10px 30px;
-        color: #fff !important;
+        color: #7b7b7b;
         font-weight: bold;
         font-size: 16px;
         text-decoration: none !important;
@@ -70,7 +74,7 @@
     }
 
     nav > a.router-link-active {
-        color: #0a0a0a;
+        color: #2c3138;
         background-color: #7d9098;
     }
 
