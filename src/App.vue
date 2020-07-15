@@ -5,7 +5,7 @@
             <router-link to="/" @click.native="skip" :class="$route.name === 'home' && 'router-link-active'" exact>
                 Equip! {{$store.getters.getApiEntitiesCount? $store.getters.getApiEntitiesCount + " found":''}}
             </router-link>
-            <router-link to="/wl" @click.native.prevent="skip" exact>
+            <router-link to="/wl" @click.native.prevent="skip" :class="$route.name === 'wl' && 'router-link-active'" exact>
                 Wish List {{ $store.getters.getWishListCount ? "(" + $store.getters.getWishListCount + ")" : ""}}
 
             </router-link>

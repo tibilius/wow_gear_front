@@ -3,6 +3,7 @@
     <DungItemList
             v-bind:gItems="wishList"
             v-bind:filteredClasses="filteredClasses"
+
     />
     </div>
 
@@ -23,6 +24,31 @@
             filteredClasses() {
                 return this.$store.getters.getFilteredClasses;
             },
+        },
+        watch: {
+            '$route'(to) {
+                this.$store.dispatch('queryWishListUpdate', to.query)
+            },
+            wishList:function () {
+                this.syncQueryParams(this.$route.query)
+            }
+        },
+        methods:{
+          syncQueryParams(toQuery){
+              let query = Object.assign({}, toQuery)
+              const wishListItems = JSON.stringify(this.$store.getters.getWishListItemsIds)
+              if (query.items !== wishListItems ) {
+                  this.wishList.length
+                      ? query.items = wishListItems
+                      : delete query.items
+                  this.$router.push({path: this.$route.path, query: query}).catch(() => {
+                  })
+              }
+          }
+        },
+        mounted() {
+            this.$store.dispatch('queryWishListUpdate', this.$route.query)
+            this.syncQueryParams(this.$route.query)
         }
     }
 </script>
