@@ -14,7 +14,7 @@ export default {
             ctx.dispatch('fetchDungeonItems')
         },
         async queryWishListUpdate(ctx, routeQuery) {
-            if (!routeQuery.items ||  JSON.stringify(ctx.getters.getWishListItemsIds) === routeQuery.items) {
+            if (!routeQuery.items || JSON.stringify(ctx.getters.getWishListItemsIds) === routeQuery.items) {
                 return
             }
             const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
@@ -24,7 +24,13 @@ export default {
 
             const res = await fetch(url, {
                 method: 'POST',
-                body: JSON.stringify({filters: [{"field": "id", "operator": "in", "value": JSON.parse(routeQuery.items)}]}),
+                body: JSON.stringify({
+                    filters: [{
+                        "field": "id",
+                        "operator": "in",
+                        "value": JSON.parse(routeQuery.items)
+                    }]
+                }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -164,6 +170,13 @@ export default {
         },
         getWishListItemsIds(state) {
             return state.wishList.map(p => p.id)
+        },
+        getWishListDownload(state) {
+            let b = state.wishList.map(p => [
+                p.dungeon.shortcut, p.inventory_type, p.item_subclass, p.name, p.haste, p.mastery, p.crit, p.versatility, p.id
+            ])
+            b.unshift(['dungeon', 'type', 'subclass', 'name', 'haste', 'mastery', 'crit.chance', 'versatility', 'id',])
+            return b.map(e => e.join(",")).join("\n")
         },
         getApiFilters(state, getters) {
             let apiFilters = []
