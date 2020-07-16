@@ -13,37 +13,32 @@ export default {
             }
             ctx.dispatch('fetchDungeonItems')
         },
-        async queryWishListUpdate(ctx, routeQuery) {
-            if (!routeQuery.items || JSON.stringify(ctx.getters.getWishListItemsIds) === routeQuery.items) {
-                return
-            }
+        loadMoreEntities(ctx, limit) {
+            ctx.commit('loading')
             const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
                 + new URLSearchParams(Object.entries({
-                    limit: 100
+                    limit: limit,
+                    offset: ctx.getters.getCurrentOffset,
                 })).toString()
-
-            const res = await fetch(url, {
+            let items = {'data': [], 'count': 0}
+            fetch(url, {
                 method: 'POST',
-                body: JSON.stringify({
-                    filters: [{
-                        "field": "id",
-                        "operator": "in",
-                        "value": JSON.parse(routeQuery.items)
-                    }]
-                }),
+                body: JSON.stringify({filters: ctx.getters.getApiFilters}),
                 headers: {
                     'Content-Type': 'application/json'
                 }
+            }).then(res => res.json()).then(json=> {
+                items = json
+                ctx.commit('addDungeonItems', items['data'])
+                ctx.commit('incrementOffset', limit)
+                ctx.commit('loaded')
+
+            }).catch(()=>{
+                ctx.commit('addDungeonItems', items['data'])
             })
-            let items = {'data': [], 'count': 0}
-            try {
-                items = await res.json()
-            } catch (e) {
-                console.log(e)
-            }
-            ctx.commit('updateWishList', items['data'])
         },
-        async fetchDungeonItems({commit, getters}, limit = 10, offset = 0,) {
+        async fetchDungeonItems({commit, getters}, limit = 20, offset = 0,) {
+            commit('loading')
             const url = process.env.VUE_APP_BACKEND_URL + "/api/dungeon/items?"
                 + new URLSearchParams(Object.entries({
                     limit: limit,
@@ -60,23 +55,19 @@ export default {
             let items = {'data': [], 'count': 0}
             try {
                 items = await res.json()
+                commit('updateOffset', limit)
             } catch (e) {
-                console.log(e)
+                console.error(e)
             }
             commit('updateDungeonItems', items['data'])
             commit('updateDungeonItemsCount', items['count'])
+            commit('loaded')
         }
 
     },
     mutations: {
-        addItemToWishList(state, item) {
-            state.wishList.push(item)
-        },
-        updateWishList(state, items) {
-            state.wishList = items
-        },
-        removeFromWishList(state, item) {
-            state.wishList.splice(state.wishList.findIndex(p => p.id === item.id), 1)
+        addDungeonItems(state, items) {
+            state.dungeonItems = state.dungeonItems.concat(items)
         },
         updateDungeonItems(state, items) {
             state.dungeonItems = items
@@ -98,7 +89,13 @@ export default {
         },
         updateSelectedInventoryType(state, inventoryType) {
             state.inventoryType.forEach(p => p.checked = inventoryType.indexOf(p.name) !== -1)
-        }
+        },
+        incrementOffset(state, offset){
+            state.offset = state.offset + offset
+        },
+        updateOffset(state, offset){
+            state.offset = offset
+        },
 
     },
     state: {
@@ -137,10 +134,13 @@ export default {
             {name: "Trinket", image: require('@/assets/inventory_types/Inv_trinket.png'), checked: false},
         ],
         itemFilters: [],
-        wishList: [],
         count: 0,
+        offset: 0,
     },
     getters: {
+        getCurrentOffset(state) {
+            return state.offset
+        },
         getApiEntities(state) {
             return state.dungeonItems
         },
@@ -156,27 +156,11 @@ export default {
         getItemFilters(state) {
             return state.itemFilters
         },
-        getWishList(state) {
-            return state.wishList
-        },
-        getWishListCount(state) {
-            return state.wishList.length
-        },
         getSelectedClasses(state) {
             return state.filteredClasses.filter(p => p.checked).map(p => p.name)
         },
         getSelectedInventoryType(state) {
             return state.inventoryType.filter(p => p.checked).map(p => p.name)
-        },
-        getWishListItemsIds(state) {
-            return state.wishList.map(p => p.id)
-        },
-        getWishListDownload(state) {
-            let b = state.wishList.map(p => [
-                p.dungeon.shortcut, p.inventory_type, p.item_subclass, p.name, p.haste, p.mastery, p.crit, p.versatility, p.id
-            ])
-            b.unshift(['dungeon', 'type', 'subclass', 'name', 'haste', 'mastery', 'crit.chance', 'versatility', 'id',])
-            return b.map(e => e.join(",")).join("\n")
         },
         getApiFilters(state, getters) {
             let apiFilters = []

@@ -8,6 +8,9 @@
         <DungItemList
                 v-bind:gItems="gItems"
                 v-bind:filteredClasses="filteredClasses"
+                v-infinite-scroll="loadMore"
+                infinite-scroll-disabled="isBusy"
+                infinite-scroll-distance="0"
         />
     </div>
 </template>
@@ -23,16 +26,17 @@
         },
         data() {
             return {
-                limit: 100,
-                offset: 0,
+                busy:false
             }
         },
 
         computed: {
+            isBusy(){
+              return this.$store.getters.isLoading
+            },
             gItems() {
                 return this.$store.getters.getApiEntities;
             },
-
             inventoryType() {
                 return this.$store.getters.getInventoryType;
             },
@@ -43,12 +47,20 @@
                 return this.$store.getters.getFilteredClasses;
             },
         },
+        methods:{
+            loadMore: function() {
+                this.busy = true
+                this.$store.dispatch('loadMoreEntities', 10)
+                this.busy=false
+            }
+        },
         watch: {
             '$route'(to) {
                 this.$store.dispatch('queryExternalUpdate', to.query)
             }
         },
         mounted() {
+            console.log('mounted')
             this.$store.dispatch('queryExternalUpdate', this.$route.query)
         }
     }
