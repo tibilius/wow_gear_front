@@ -1,11 +1,18 @@
 <template>
     <div>
+        <p style="display:inline;cursor: pointer;"
+           v-show="!inWishList"
+           @click="alwaysExpand=!alwaysExpand"
+           :class="alwaysExpand?'alwaysExpand':'alwaysHide'">
+            {{alwaysExpand ? 'Click to hide item stats' : 'Click to expand item stats'}}
+        </p>
         <ul class="items tilesWrap">
             <DungItem
                     v-for="gItem in gItems"
                     :key="gItem.id"
                     v-bind:gItem="gItem"
                     v-bind:filteredClasses="filteredClasses"
+                    v-bind:alwaysExpand="alwaysExpand"
             />
         </ul>
     </div>
@@ -18,8 +25,24 @@
         props: {
             gItems: Array,
             filteredClasses: Array,
+            inWishList:Boolean,
         },
-        components: {DungItem}
+        data() {
+            return {
+                alwaysExpand: false
+            }
+        },
+        components: {DungItem},
+        watch: {
+            alwaysExpand: function () {
+                localStorage.dungeon_items_alwaysExpand = this.alwaysExpand
+            }
+        },
+        mounted() {
+            if (localStorage.dungeon_items_alwaysExpand) {
+                this.alwaysExpand = JSON.parse(localStorage.dungeon_items_alwaysExpand)
+            }
+        }
     }
 </script>
 

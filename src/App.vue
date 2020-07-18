@@ -41,7 +41,7 @@
     }
     #app > h1{
         margin: 0;
-        padding: 2rem;
+        padding: 1rem;
     }
     body {
         margin: 0;
@@ -50,7 +50,7 @@
     /*menu*/
     nav {
         display: inline-block;
-        margin: 10px auto 45px;
+        margin: 10px auto;
         background-color: transparent;
         box-shadow: 0 1px 1px #ccc;
         border-radius: 2px;

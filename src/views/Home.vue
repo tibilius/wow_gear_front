@@ -4,6 +4,8 @@
                 v-bind:itemFilters="itemFilters"
                 v-bind:filteredClasses="filteredClasses"
                 v-bind:inventoryType="inventoryType"
+                v-bind:dungeons="dungeons"
+                v-bind:secondaryMainStat="secondaryMainStat"
         />
         <DungItemList
                 v-bind:gItems="gItems"
@@ -24,18 +26,15 @@
         components: {
             DungItemList, SearchItemsForm
         },
-        data() {
-            return {
-                busy:false
-            }
-        },
-
         computed: {
             isBusy(){
               return this.$store.getters.isLoading
             },
             gItems() {
                 return this.$store.getters.getApiEntities;
+            },
+            dungeons(){
+                return this.$store.getters.getDungeon
             },
             inventoryType() {
                 return this.$store.getters.getInventoryType;
@@ -46,12 +45,13 @@
             filteredClasses() {
                 return this.$store.getters.getFilteredClasses;
             },
+            secondaryMainStat() {
+                return this.$store.getters.getSecondaryMainStat
+            },
         },
         methods:{
             loadMore: function() {
-                this.busy = true
                 this.$store.dispatch('loadMoreEntities', 10)
-                this.busy=false
             }
         },
         watch: {
@@ -60,7 +60,7 @@
             }
         },
         mounted() {
-            console.log('mounted')
+            console.log(this.$route.query)
             this.$store.dispatch('queryExternalUpdate', this.$route.query)
         }
     }

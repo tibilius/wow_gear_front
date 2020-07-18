@@ -25,7 +25,7 @@
             }
         },
         mounted() {
-            this.onChange()
+            // this.onChange()
         }
     }
 </script>
