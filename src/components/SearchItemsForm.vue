@@ -8,6 +8,7 @@
         </div>
         <div class="filters">
             <DungeonExcludeSelect v-bind:dungeons="dungeons"/>
+            <SecondaryStatsShortFilters v-bind:secondaryStats="secondaryStats"/>
             <SecondaryMainStatFilter v-bind:secondaryMainStat="secondaryMainStat"/>
             <SecondaryStatFilters v-bind:itemFilters="itemFilters"/>
         </div>
@@ -20,6 +21,7 @@
     import DungeonExcludeSelect from "@/components/DungeonExcludeSelect";
     import SecondaryMainStatFilter from "@/components/SecondaryMainStatFilter";
     import SecondaryStatFilters from "@/components/SecondaryStatFilters";
+    import SecondaryStatsShortFilters from "./SecondaryStatsShortFilters";
 
     export default {
         name: "SearchItemsForm",
@@ -29,8 +31,10 @@
             filteredClasses: Array,
             dungeons: Array,
             secondaryMainStat: Array,
+            secondaryStats: Array,
         },
         components: {
+            SecondaryStatsShortFilters,
             SecondaryStatFilters,
             SecondaryMainStatFilter,
             DungeonExcludeSelect,

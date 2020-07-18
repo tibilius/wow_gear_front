@@ -6,6 +6,7 @@
                 v-bind:inventoryType="inventoryType"
                 v-bind:dungeons="dungeons"
                 v-bind:secondaryMainStat="secondaryMainStat"
+                v-bind:secondaryStats="secondaryStats"
         />
         <DungItemList
                 v-bind:gItems="gItems"
@@ -48,6 +49,9 @@
             secondaryMainStat() {
                 return this.$store.getters.getSecondaryMainStat
             },
+            secondaryStats() {
+                return this.$store.getters.getSecondaryStats
+            },
         },
         methods:{
             loadMore: function() {
@@ -60,7 +64,6 @@
             }
         },
         mounted() {
-            console.log(this.$route.query)
             this.$store.dispatch('queryExternalUpdate', this.$route.query)
         }
     }

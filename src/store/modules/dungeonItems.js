@@ -20,6 +20,9 @@ export default {
             if (routeQuery.secondary_main_stat && (parsed = JSON.parse(routeQuery.secondary_main_stat)).length) {
                 ctx.commit('updateSelectedSecondaryMainStat', parsed)
             }
+            if (routeQuery.secondary_stats && (parsed = JSON.parse(routeQuery.secondary_stats)).length) {
+                ctx.commit('updateSelectedSecondaryStats', parsed)
+            }
             ctx.dispatch('fetchDungeonItems')
         },
         loadMoreEntities(ctx, limit) {
@@ -104,6 +107,9 @@ export default {
         updateSelectedSecondaryMainStat(state, stats) {
             state.secondaryMainStat.forEach(p => p.checked = stats.indexOf(p.name) !== -1)
         },
+        updateSelectedSecondaryStats(state, stats) {
+            state.secondaryStats.forEach(p => p.checked = stats.indexOf(p.name) !== -1)
+        },
         incrementOffset(state, offset) {
             state.offset = state.offset + offset
         },
@@ -153,6 +159,12 @@ export default {
             {name: "crit", checked: false},
             {name: "mastery", checked: false},
         ],
+        secondaryStats: [
+            {name: "versatility", checked: false},
+            {name: "haste", checked: false},
+            {name: "crit", checked: false},
+            {name: "mastery", checked: false},
+        ],
         itemFilters: [],
         count: 0,
         offset: 0,
@@ -185,8 +197,14 @@ export default {
         getSecondaryMainStat(state) {
             return state.secondaryMainStat
         },
-        getSelectedSecondaryMainStat(state){
+        getSelectedSecondaryMainStat(state) {
             return state.secondaryMainStat.filter(p => p.checked).map(p => p.name)
+        },
+        getSecondaryStats(state) {
+            return state.secondaryStats
+        },
+        getSelectedSecondaryStats(state) {
+            return state.secondaryStats.filter(p => p.checked).map(p => p.name)
         },
         getApiFilters(state, getters) {
             let apiFilters = []
@@ -220,6 +238,11 @@ export default {
                     'operator': 'in',
                     'value': getters.getSelectedSecondaryMainStat
                 }])
+            }
+            if (getters.getSelectedSecondaryStats.length) {
+                apiFilters = apiFilters.concat(getters.getSelectedSecondaryStats.map(p => {
+                    return {"field": p, "operator": "gt", "value": 0}
+                }))
             }
             return apiFilters
         }
