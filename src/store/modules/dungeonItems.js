@@ -24,6 +24,7 @@ export default {
                 ctx.commit('updateSelectedSecondaryStats', parsed)
             }
             ctx.dispatch('fetchDungeonItems')
+            ctx.commit('init')
         },
         loadMoreEntities(ctx, limit) {
             ctx.commit('loading')

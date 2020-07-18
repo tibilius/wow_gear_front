@@ -25,7 +25,9 @@
             }
         },
         mounted() {
-            // this.onChange()
+            if (this.$store.getters.isInited) {
+                this.onChange()
+            }
         }
     }
 </script>

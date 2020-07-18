@@ -1,6 +1,7 @@
 export default {
     state: {
-        loading: false
+        loading: false,
+        isInited: false, //when first mount passed
     },
     mutations: {
         loading(state) {
@@ -9,10 +10,16 @@ export default {
         loaded(state) {
             state.loading = false
         },
+        init(state) {
+            state.isInited =true
+        },
     },
     getters: {
         isLoading(state) {
             return state.loading
+        },
+        isInited(state){
+          return state.isInited
         },
     }
 }
