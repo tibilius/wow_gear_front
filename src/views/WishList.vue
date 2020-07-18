@@ -9,6 +9,7 @@
         <DungItemList
                 v-bind:gItems="wishList"
                 v-bind:filteredClasses="filteredClasses"
+                v-bind:inWishList="true"
 
         />
     </div>

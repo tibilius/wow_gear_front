@@ -1,13 +1,18 @@
 <template>
-    <li :class="[isItemInWishList? 'wish-list':'']">
+    <li :class="[isItemInWishList? 'wish-list':'']"
+        :title="[isItemInWishList? ' in Wish List. Click to remove':'Click to add inWish list']"
+        @mouseover="hidden = false" @mouseleave="hidden = true"
+        @click="toggleWishList"
+    >
         <div class="icon"><img :src="mediaIcon(gItem.media)"></div>
-        <h2 v-bind:class="gItem.dungeon.shortcut">{{ gItem.dungeon.shortcut}}</h2>
+        <h2 v-bind:class="gItem.dungeon.shortcut" :title="gItem.dungeon.name">{{ gItem.dungeon.shortcut}}</h2>
         <h3>{{ gItem.name }}</h3>
-        <div>
-            <p v-if="gItem.inventory_type" class="inventory_type">
-                <span class="subclass">{{gItem.item_subclass}}</span>
-                <span class="type">{{gItem.inventory_type}}</span>
-            </p>
+        <p v-if="gItem.inventory_type" class="inventory_type">
+            <span class="subclass" title="subclass">{{gItem.item_subclass}}</span>
+            <span class="type" title="inventory type"> {{gItem.inventory_type}}</span>
+        </p>
+        <p v-show="!isShowStats" style="cursor: pointer">Show more</p>
+        <div class="stats" v-show="isShowStats">
             <p v-if="gItem.main_stat > 0" class="main_stat"><span>Main stat: </span> {{gItem.main_stat}}</p>
             <p v-if="gItem.stamina > 0" class="stamina"><span>Stamina:</span> {{gItem.stamina}}</p>
             <p v-if="gItem.haste > 0" class="haste"><span>Haste:</span> {{ gItem.haste}}</p>
@@ -15,14 +20,9 @@
             <p v-if="gItem.crit > 0" class="crit"><span>Crit: </span> {{ gItem.crit}}</p>
             <p v-if="gItem.mastery > 0" class="mastery"><span>Mastery: </span> {{ gItem.mastery}}</p>
             <p v-if="gItem.spells.length > 0" class="spells">{{ gItem.spells | concat}}</p>
-
         </div>
 
-        <button @click="removeFromWishList" v-if="isItemInWishList"> Remove from wish list</button>
-        <button @click="addToWishList" v-else> Add to wish list</button>
-
-        <a :href="'http://wowhead.com/item=' + gItem.id" target="_blank">wowhead</a>
-
+        <a :href="'http://wowhead.com/item=' + gItem.id" target="_blank" title="wowhead.com">wowhead</a>
     </li>
 </template>
 
@@ -31,15 +31,30 @@
         props: {
             gItem: {
                 type: Object
+            },
+            alwaysExpand: Boolean
+        },
+        data() {
+            return {
+                hidden: true
             }
         },
-        computed:{
+        computed: {
+            isShowStats() {
+                return this.alwaysExpand || this.isItemInWishList || !this.hidden
+            },
             isItemInWishList() {
                 return this.$store.getters.getWishList.length
                     && this.$store.getters.getWishList.find(p => p.id === this.gItem.id)
             },
         },
         methods: {
+            toggleWishList() {
+                if (this.isItemInWishList) {
+                    return this.removeFromWishList()
+                }
+                return this.addToWishList()
+            },
             addToWishList() {
                 this.$store.commit('addItemToWishList', this.gItem)
             },
@@ -72,7 +87,7 @@
     p.inventory_type {
         color: #0ABFBC;
         width: 100%;
-        float: left;
+        float: right;
     }
 
     p > span {
@@ -92,6 +107,7 @@
     }
 
     li {
+        cursor: pointer;
         display: inline-block;
         width: 20%;
         min-width: 200px;
@@ -101,12 +117,13 @@
         vertical-align: top;
         margin: 10px;
         font-family: 'helvetica', san-serif;
-        min-height: 25vh;
+        min-height: 15vh;
         background: #3c4545;
         border: 1px solid #252727;
         text-align: left;
     }
-    li.wish-list{
+
+    li.wish-list {
         border: 2px #9b1bb1 solid;
     }
 
@@ -123,7 +140,7 @@
 
     li h2 {
         color: #61724d;
-        font-size: 85px;
+        font-size: 70px;
         margin: 0;
         position: absolute;
         opacity: 0.2;
@@ -145,52 +162,9 @@
         margin-top: 5px;
     }
 
-    li button {
-        background: transparent;
-        border: 1px solid #b7b7b7;
-        padding: 10px 20px;
-        color: #b7b7b7;
-        border-radius: 3px;
-        position: relative;
-        transition: all 0.3s ease-in-out;
-        transform: translateY(-40px);
-        opacity: 0;
-        cursor: pointer;
-        overflow: hidden;
-    }
-
-    li button:before {
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 120%;
-        background: #b7b7b7;
-        top: 0;
-        opacity: 0;
-        left: -140px;
-        border-radius: 0 20px 20px 0;
-        z-index: -1;
-        transition: all 0.3s ease-in-out;
-
-    }
-
-    li:hover button {
-        transform: translateY(5px);
-        opacity: 1;
-    }
-
-    li button:hover {
-        color: #40532f;
-    }
-
-    li button:hover:before {
-        left: 0;
-        opacity: 1;
-    }
-
     li:hover h2 {
         top: 0px;
-        opacity: 0.6;
+        opacity: 0.8;
     }
 
     li:before {

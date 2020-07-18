@@ -1,5 +1,8 @@
 export default {
     actions: {
+        /**
+         * @todo encapsulate it!
+         */
         queryExternalUpdate(ctx, routeQuery) {
             let parsed = []
             if (routeQuery.filters && (parsed = JSON.parse(routeQuery.filters)).length) {
@@ -10,6 +13,12 @@ export default {
             }
             if (routeQuery.inventory_type && (parsed = JSON.parse(routeQuery.inventory_type)).length) {
                 ctx.commit('updateSelectedInventoryType', parsed)
+            }
+            if (routeQuery.dungeon && (parsed = JSON.parse(routeQuery.dungeon)).length) {
+                ctx.commit('updateSelectedDungeon', parsed)
+            }
+            if (routeQuery.secondary_main_stat && (parsed = JSON.parse(routeQuery.secondary_main_stat)).length) {
+                ctx.commit('updateSelectedSecondaryMainStat', parsed)
             }
             ctx.dispatch('fetchDungeonItems')
         },
@@ -27,14 +36,15 @@ export default {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(res => res.json()).then(json=> {
+            }).then(res => res.json()).then(json => {
                 items = json
                 ctx.commit('addDungeonItems', items['data'])
                 ctx.commit('incrementOffset', limit)
                 ctx.commit('loaded')
 
-            }).catch(()=>{
+            }).catch(() => {
                 ctx.commit('addDungeonItems', items['data'])
+                ctx.commit('loaded')
             })
         },
         async fetchDungeonItems({commit, getters}, limit = 20, offset = 0,) {
@@ -58,6 +68,7 @@ export default {
                 commit('updateOffset', limit)
             } catch (e) {
                 console.error(e)
+                commit('loaded')
             }
             commit('updateDungeonItems', items['data'])
             commit('updateDungeonItemsCount', items['count'])
@@ -90,10 +101,13 @@ export default {
         updateSelectedInventoryType(state, inventoryType) {
             state.inventoryType.forEach(p => p.checked = inventoryType.indexOf(p.name) !== -1)
         },
-        incrementOffset(state, offset){
+        updateSelectedSecondaryMainStat(state, stats) {
+            state.secondaryMainStat.forEach(p => p.checked = stats.indexOf(p.name) !== -1)
+        },
+        incrementOffset(state, offset) {
             state.offset = state.offset + offset
         },
-        updateOffset(state, offset){
+        updateOffset(state, offset) {
             state.offset = offset
         },
 
@@ -133,6 +147,12 @@ export default {
             {name: "Finger", image: require('@/assets/inventory_types/Inv_finger.png'), checked: false},
             {name: "Trinket", image: require('@/assets/inventory_types/Inv_trinket.png'), checked: false},
         ],
+        secondaryMainStat: [
+            {name: "versatility", checked: false},
+            {name: "haste", checked: false},
+            {name: "crit", checked: false},
+            {name: "mastery", checked: false},
+        ],
         itemFilters: [],
         count: 0,
         offset: 0,
@@ -162,6 +182,12 @@ export default {
         getSelectedInventoryType(state) {
             return state.inventoryType.filter(p => p.checked).map(p => p.name)
         },
+        getSecondaryMainStat(state) {
+            return state.secondaryMainStat
+        },
+        getSelectedSecondaryMainStat(state){
+            return state.secondaryMainStat.filter(p => p.checked).map(p => p.name)
+        },
         getApiFilters(state, getters) {
             let apiFilters = []
             if (state.itemFilters.length) {
@@ -179,6 +205,20 @@ export default {
                     'field': 'inventory_type',
                     'operator': 'in',
                     'value': getters.getSelectedInventoryType
+                }])
+            }
+            if (getters.getSelectedDungeon.length) {
+                apiFilters = apiFilters.concat([{
+                    'field': 'dungeon.shortcut',
+                    'operator': 'notIn',
+                    'value': getters.getSelectedDungeon
+                }])
+            }
+            if (getters.getSelectedSecondaryMainStat.length) {
+                apiFilters = apiFilters.concat([{
+                    'field': 'main_secondary_stat',
+                    'operator': 'in',
+                    'value': getters.getSelectedSecondaryMainStat
                 }])
             }
             return apiFilters
