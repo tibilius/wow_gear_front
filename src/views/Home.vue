@@ -30,6 +30,8 @@
         computed: {
             isBusy(){
               return this.$store.getters.isLoading
+                  || this.gItems.length == 0
+                  || this.gItems.length >=  this.$store.getters.getApiEntitiesCount
             },
             gItems() {
                 return this.$store.getters.getApiEntities;
