@@ -40,7 +40,10 @@ export default {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(res => res.json()).then(json => {
+            }).then(res => (res.ok ? res.json() : null)).then(json => {
+                if (json == null){
+                    return;
+                }
                 items = json
                 ctx.commit('addDungeonItems', items['data'])
                 ctx.commit('incrementOffset', limit)
@@ -68,8 +71,14 @@ export default {
             })
             let items = {'data': [], 'count': 0}
             try {
-                items = await res.json()
-                commit('updateOffset', limit)
+                const status = await res.status
+                if (status == 200) {
+                    items = await res.json()
+                    commit('updateOffset', limit)
+                }
+                else {
+                    commit('loaded')
+                }
             } catch (e) {
                 console.error(e)
                 commit('loaded')
@@ -137,9 +146,8 @@ export default {
         ],
         inventoryType: [
             {name: "Chest", image: require('@/assets/inventory_types/Inv_chest.png'), checked: false},
-            {name: "Helm", image: require('@/assets/inventory_types/Inv_helm.png'), checked: false},
-            {name: "Shoulders", image: require('@/assets/inventory_types/Inv_shoulder_11.png'), checked: false},
-            {name: "Ranged", image: require('@/assets/inventory_types/Inv_bow.png'), checked: false},
+            {name: "Head", image: require('@/assets/inventory_types/Inv_helm.png'), checked: false},
+            {name: "Shoulder", image: require('@/assets/inventory_types/Inv_shoulder_11.png'), checked: false},
             {name: "Two-Hand", image: require('@/assets/inventory_types/Inv_two_hand.png'), checked: false},
             {name: "One-Hand", image: require('@/assets/inventory_types/Inv_one_hand.png'), checked: false},
             {
@@ -156,6 +164,8 @@ export default {
             {name: "Back", image: require('@/assets/inventory_types/Inv_back.png'), checked: false},
             {name: "Finger", image: require('@/assets/inventory_types/Inv_finger.png'), checked: false},
             {name: "Trinket", image: require('@/assets/inventory_types/Inv_trinket.png'), checked: false},
+            {name: "Neck", image: require('@/assets/inventory_types/Inv_neck.png'), checked: false},
+            {name: "Ranged", image: require('@/assets/inventory_types/Inv_bow.png'), checked: false},
         ],
         secondaryMainStat: [
             {name: "versatility", checked: false},
@@ -217,7 +227,7 @@ export default {
             }
             if (getters.getSelectedClasses.length) {
                 apiFilters = apiFilters.concat([{
-                    'field': 'wow_player_class.name',
+                    'field': 'player_class.name',
                     'operator': 'in',
                     'value': getters.getSelectedClasses
                 }])

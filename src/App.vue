@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h1>Welcome to Wow BFA dungeon items finder</h1>
+        <h1>Welcome to Wow ShadowLands dungeon items finder</h1>
         <nav>
             <router-link to="/" @click.native="skip" :class="$route.name === 'home' && 'router-link-active'" exact>
                 Equip! {{$store.getters.getApiEntitiesCount? $store.getters.getApiEntitiesCount + " found":''}}
