@@ -7,6 +7,8 @@
             </router-link>
             <router-link to="/wl" @click.native.prevent="skip" :class="$route.name === 'wl' && 'router-link-active'" exact>
                 Wish List {{ $store.getters.getWishListCount ? "(" + $store.getters.getWishListCount + ")" : ""}}
+            </router-link>
+            <router-link to="like" >
 
             </router-link>
         </nav>

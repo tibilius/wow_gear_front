@@ -136,6 +136,9 @@ export default {
             {name: "Demon Hunter", image: require('@/assets/wow_classes/dh.png'), checked: false}
         ],
         inventoryType: [
+            {name: "Chest", image: require('@/assets/inventory_types/Inv_chest.png'), checked: false},
+            {name: "Helm", image: require('@/assets/inventory_types/Inv_helm.png'), checked: false},
+            {name: "Shoulders", image: require('@/assets/inventory_types/Inv_shoulder_11.png'), checked: false},
             {name: "Ranged", image: require('@/assets/inventory_types/Inv_bow.png'), checked: false},
             {name: "Two-Hand", image: require('@/assets/inventory_types/Inv_two_hand.png'), checked: false},
             {name: "One-Hand", image: require('@/assets/inventory_types/Inv_one_hand.png'), checked: false},
@@ -150,7 +153,7 @@ export default {
             {name: "Waist", image: require('@/assets/inventory_types/Inv_waist.png'), checked: false},
             {name: "Legs", image: require('@/assets/inventory_types/Inv_pants.png'), checked: false},
             {name: "Feet", image: require('@/assets/inventory_types/Inv_feet.png'), checked: false},
-            // {name: "Back", image: require('@/assets/inventory_types/warrior.png'), checked: false},
+            {name: "Back", image: require('@/assets/inventory_types/Inv_back.png'), checked: false},
             {name: "Finger", image: require('@/assets/inventory_types/Inv_finger.png'), checked: false},
             {name: "Trinket", image: require('@/assets/inventory_types/Inv_trinket.png'), checked: false},
         ],
